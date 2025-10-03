@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Upload Test</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <style>
+        .dropzone {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            margin: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .dropzone:hover {
+            border-color: #007bff;
+            background-color: #f8f9fa;
+        }
+        .preview {
+            display: none;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px;
+        }
+        .preview img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Upload Test</h1>
+    
+    <form action="/orders" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="_token" value="test-token">
+        <input type="hidden" name="design_type" value="custom">
+        <input type="hidden" name="items" value='[{"name":"Test Item","quantity":1}]'>
+        <input type="hidden" name="delivery_date" value="2025-09-25">
+        
+        <div class="dropzone" id="dropzone">
+            <input type="file" id="file-input" name="design_images[]" multiple accept="image/*" style="opacity: 0; position: absolute;">
+            <p>Click here or drag images to upload</p>
+        </div>
+        
+        <div class="preview" id="preview"></div>
+        
+        <button type="submit">Submit Test Order</button>
+    </form>
+    
+    <script>
+        console.log('Image upload test script loaded');
+        
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('file-input');
+        const preview = document.getElementById('preview');
+        
+        // Click to select files
+        dropzone.addEventListener('click', function() {
+            console.log('Dropzone clicked');
+            fileInput.click();
+        });
+        
+        // Handle file selection
+        fileInput.addEventListener('change', function(e) {
+            console.log('Files selected:', e.target.files);
+            handleFiles(e.target.files);
+        });
+        
+        // Handle drag and drop
+        dropzone.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            dropzone.style.borderColor = '#007bff';
+        });
+        
+        dropzone.addEventListener('drop', function(e) {
+            e.preventDefault();
+            console.log('Files dropped:', e.dataTransfer.files);
+            fileInput.files = e.dataTransfer.files;
+            handleFiles(e.dataTransfer.files);
+        });
+        
+        function handleFiles(files) {
+            console.log('Handling files:', files.length);
+            preview.innerHTML = '';
+            
+            if (files.length > 0) {
+                preview.style.display = 'grid';
+                
+                Array.from(files).forEach((file, index) => {
+                    console.log('Processing file:', file.name, file.type, file.size);
+                    
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            console.log('File loaded:', file.name);
+                            const div = document.createElement('div');
+                            div.innerHTML = `
+                                <img src="${e.target.result}" alt="${file.name}">
+                                <p style="font-size: 12px;">${file.name}</p>
+                            `;
+                            preview.appendChild(div);
+                        };
+                        reader.onerror = function(error) {
+                            console.error('Error reading file:', error);
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        console.warn('Skipping non-image file:', file.name);
+                    }
+                });
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+        
+        console.log('Test script setup complete');
+    </script>
+</body>
+</html>
