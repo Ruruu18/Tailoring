@@ -1,3 +1,79 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Cross-Platform CSS Fixes for macOS and Windows */
+@layer base {
+    /* Font rendering normalization */
+    * {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+
+    /* Prevent layout breaking on Windows */
+    html {
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
+    }
+
+    body {
+        line-height: 1.5;
+        min-height: 100vh;
+    }
+}
+
+@layer components {
+    /* Grid children overflow prevention */
+    .grid > * {
+        min-width: 0;
+        min-height: 0;
+    }
+
+    /* Flexbox children overflow prevention */
+    .flex > * {
+        min-width: 0;
+    }
+
+    /* Scrollbar styling for consistency across OS */
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: #d1d5db #f3f4f6;
+    }
+
+    *::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    *::-webkit-scrollbar-track {
+        background: #f3f4f6;
+        border-radius: 4px;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background: #d1d5db;
+        border-radius: 4px;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+        background: #9ca3af;
+    }
+
+    /* Windows-specific sticky positioning fix */
+    .sticky {
+        position: -webkit-sticky;
+        position: sticky;
+    }
+
+    /* Windows-specific backdrop-blur fix */
+    .backdrop-blur-sm {
+        -webkit-backdrop-filter: blur(4px);
+        backdrop-filter: blur(4px);
+    }
+
+    /* Transform performance optimization */
+    .transform {
+        transform: translateZ(0);
+    }
+}

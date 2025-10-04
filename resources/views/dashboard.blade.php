@@ -324,22 +324,6 @@
         </div>
     </div>
 
-    <style>
-        /* Windows-specific grid fix */
-        @media (min-width: 1024px) {
-            .lg\:grid-cols-2 {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 1.5rem;
-            }
-
-            .lg\:grid-cols-2 > * {
-                width: 100%;
-                min-width: 0;
-            }
-        }
-    </style>
-
     <script>
         function updateDateTime() {
             // Get current time and format for Philippine timezone
