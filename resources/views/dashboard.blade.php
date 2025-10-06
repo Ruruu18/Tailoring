@@ -253,7 +253,7 @@
                                  </div>
                              </div>
                              @if($recentNotifications->count() > 0)
-                                 <div class="space-y-3 sm:space-y-4 max-h-[20rem] sm:max-h-[28rem] overflow-y-auto pr-2" style="scrollbar-width: thin; scrollbar-color: #d1d5db #f3f4f6;">
+                                 <div class="space-y-3 sm:space-y-4 max-h-[20rem] sm:max-h-[28rem] overflow-y-auto pr-2">
                                      @foreach($recentNotifications as $notification)
                                          <div class="notification-item flex items-start space-x-3 sm:space-x-4 p-3 sm:p-4 rounded-xl {{ $notification->is_read ? 'bg-gray-50' : 'bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200' }} transition-all duration-200 hover:shadow-md cursor-pointer" data-id="{{ $notification->id }}" onclick="markNotificationAsRead({{ $notification->id }})">
                                              <div class="flex-shrink-0 mt-1">
